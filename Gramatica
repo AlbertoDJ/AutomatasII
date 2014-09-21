@@ -13,6 +13,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import static java.rmi.Naming.list;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,7 +30,12 @@ public class Gramatica extends JFrame implements ActionListener{
 	JLabel LabelT;     	
 	JButton BtnAbrir, BtnCompleta, BtnIzq, BtnDer, BtnTer, BtnNoTer, BtnSalir;     	
 	JFileChooser fileChooser;   
-	String cadena = "";
+	String cadena = "", aux = "";     
+               
+        ArrayList<String> Izq = new ArrayList<>();  
+        ArrayList<String> Der = new ArrayList<>();  
+        ArrayList<String> Ter = new ArrayList<>();  
+        ArrayList<String> noTer = new ArrayList<>();  
         
     public Gramatica(){
         cont = getContentPane();
@@ -65,67 +75,105 @@ public class Gramatica extends JFrame implements ActionListener{
             BtnSalir.addActionListener(this);                                 
     
     }
-
     
     public void actionPerformed(ActionEvent ev) {
-        
+                
         if(ev.getSource() == BtnAbrir){
-             String archivo = abrirArchivo();             
-                JOptionPane.showMessageDialog(null, archivo);                         
+            abrirArchivo();            
         }
-        if(ev.getSource() == BtnCompleta){
-        
+        if(ev.getSource() == BtnCompleta){            
+            Completa();        
         }
-        if(ev.getSource() == BtnIzq){
-            
+        if(ev.getSource() == BtnIzq){            
+            Izquierda();
         }        
-        if(ev.getSource() == BtnDer){
-        
+        if(ev.getSource() == BtnDer){           
+            Derecha();
         }        
-        if(ev.getSource() == BtnTer){
-        
+        if(ev.getSource() == BtnTer){            
+            Terminales();
         }        
-        if(ev.getSource() == BtnNoTer){
-        
+        if(ev.getSource() == BtnNoTer){            
+            NoTerminales();
         }        
         if(ev.getSource() == BtnSalir){
             JOptionPane.showMessageDialog(null, "\n          Saliendo ...\n\n");
             System.exit(0);
         }
-       
-        
-    }
+               
+    } // Fin ActionEvent
     
 //***************************************************************************************************************************
 //********************************************** METODOS ********************************************************************
 //***************************************************************************************************************************
             
-    private String abrirArchivo() {
-        String aux = " ";
-        cadena = " ";
-        int a=0;
-        
-        try{ 
-            
+    private void abrirArchivo() {                
+        try{             
             fileChooser.showOpenDialog(this); //para llenar el metodo que deja cargar la ventana	    		
 	 	File abrir = fileChooser.getSelectedFile(); //abrir el archivo seleccionado	 		                              
-                
+                 
        		if(abrir != null){ 	//recorrer el archivo y lo muestra
-	 		FileReader archivos = new FileReader(abrir);
-			BufferedReader leer = new BufferedReader(archivos);
+                    FileReader archivos = new FileReader(abrir);
+                    BufferedReader leer = new BufferedReader(archivos);
                         
 			while((aux = leer.readLine())!= null){
 	 			cadena += aux + "\n";                                                             
-	 		}            
-	  		leer.close();
+	 		}       
+                        
+                    leer.close(); 
+                    JOptionPane.showMessageDialog(null, cadena); 
 	 	}
-                
+                                                          
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, e, "No se encontro el archivo", JOptionPane.WARNING_MESSAGE);
-        }       
-            return cadena;
+        }                     
+               
+    }   //Fin Abrir archivo   
+    
+        private void Completa() {                                                      
+                try {                                                     	                              
+                        		
+                    FileReader archivo = new FileReader("C:/Users/Beto/Desktop/Gramatica.txt");
+                    BufferedReader leer = new BufferedReader(archivo);
+                        
+                    ArrayList<String> Comp = new ArrayList<String>();
+                    
+                    
+			while((aux = leer.readLine())!= null){                            
+                            
+                                if(aux.indexOf("->") > 0){ // para quitar gramatica y las llaves                                    
+                               //   for(int i=0; i<=aux.length();i++){ este for se supone que tiene que quitar el ultimo punto y coma pero no se que me falta
+                                      cadena = cadena +aux+ "\n";
+                                     // cadena+= aux +"\n";
+                                 // }
+                                    
+                                 
+                                } 
+                                 
+	 		}        
+                        JOptionPane.showMessageDialog(null, cadena);
+                                       
+                
+                }catch(IOException e){                  
+                    JOptionPane.showMessageDialog(null,e,"No se encontro el archivo", JOptionPane.WARNING_MESSAGE);
+                }                                                                       
+        }   //Fin Completa      
+
+        private void Izquierda() {
+       
+        }
+
+        private void Terminales() {
         
-    }
+        }
+
+        private void Derecha() {
+        
+        }
+
+        private void NoTerminales() {
+        
+        }
     
 //***************************************************************************************************************************
 //***************************************************************************************************************************
@@ -139,8 +187,6 @@ public class Gramatica extends JFrame implements ActionListener{
             Screen.setTitle(" Gramática");
             Screen.setLocationRelativeTo(null);    //Centra la ventana			
 	    Screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    
+    }   
     
 }
